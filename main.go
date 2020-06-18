@@ -10,6 +10,8 @@ import (
 	"os"
 )
 
+var linesParameter = flag.Int("n", 10, "print NUM lines instead of 10.")
+
 func main() {
 	flag.Parse()
 
@@ -43,7 +45,7 @@ func countAndPrint(input *os.File) {
 	var counter int
 
 	for {
-		if counter == 10 {
+		if counter == *linesParameter {
 			break
 		}
 
