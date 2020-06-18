@@ -4,13 +4,42 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"io"
 	"os"
 )
 
 func main() {
-	buf := bufio.NewReader(os.Stdin)
+	flag.Parse()
+
+	if len(flag.Args()) > 0 {
+		for filePOS, fileName := range flag.Args() {
+			file, fileErr := os.Open(fileName)
+			if fileErr != nil {
+				fmt.Fprintln(os.Stderr, fileErr)
+				os.Exit(1)
+			}
+
+			countAndPrint(file)
+
+			if filePOS != len(flag.Args())-1 {
+				fmt.Print("\n")
+			}
+
+			file.Close()
+		}
+	} else {
+		countAndPrint(os.Stdin)
+	}
+}
+
+func countAndPrint(input *os.File) {
+	if len(flag.Args()) > 1 {
+		fmt.Printf("==> %s <==\n", input.Name())
+	}
+
+	buf := bufio.NewReader(input)
 	var counter int
 
 	for {
